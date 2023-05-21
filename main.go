@@ -66,8 +66,13 @@ func getWeather(c echo.Context) error {
 		if err1 != nil {
 			return c.String(http.StatusOK, fmt.Sprintf("Error: %s", err1.Error()))
 		} else {
-			return c.String(http.StatusOK, fmt.Sprintf("%s's Weather Details\nTemperature : %f\nPressure : %d\nHumidity : %d",
-				country, weather.Main.Temp, weather.Main.Pressure, weather.Main.Humidity))
+			output, err := json.MarshalIndent(weather.Main, "", "    ")
+			if err != nil {
+				panic(err)
+			}
+			return c.String(http.StatusOK, string(output))
+			// return c.String(http.StatusOK, fmt.Sprintf("%s's Weather Details\nTemperature : %f\nPressure : %d\nHumidity : %d",
+			// 	country, weather.Main.Temp, weather.Main.Pressure, weather.Main.Humidity))
 		}
 	}
 
